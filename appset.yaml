@@ -21,7 +21,7 @@ spec:
 
   template:
     metadata:
-      name: "{{.path.basename}}"
+      name: "{{.name}}-{{.path.basename}}"
     spec:
       project: "default"
       source:
@@ -29,7 +29,7 @@ spec:
         targetRevision: HEAD
         path: app
       destination:
-        name: "{{.path.basename}}"
+        name: "{{.name}}"
         namespace: "test-{{.path.basename}}"
       syncPolicy:
         automated:
