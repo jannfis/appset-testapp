@@ -25,7 +25,7 @@ spec:
         targetRevision: HEAD
         path: app
       destination:
-        name: in-cluster
+        name: agent-managed
         namespace: test-{{.name}}
       syncPolicy:
         automated:

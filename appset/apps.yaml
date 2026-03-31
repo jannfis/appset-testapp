@@ -1,66 +1,66 @@
 apps:
-- app-01
-- app-02
-- app-03
-- app-04
-- app-05
-- app-06
-- app-07
-- app-08
-- app-09
-- app-10
-- app-11
-- app-12
-- app-13
-- app-14
-- app-15
-- app-16
-- app-17
-- app-18
-- app-19
-- app-20
-- app-21
-- app-22
-- app-23
-- app-24
-- app-25
-- app-26
-- app-27
-- app-28
-- app-29
-- app-30
-- app-31
-- app-32
-- app-33
-- app-34
-- app-35
-- app-36
-- app-37
-- app-38
-- app-39
-- app-40
-- app-41
-- app-42
-- app-43
-- app-44
-- app-45
-- app-46
-- app-47
-- app-48
-- app-49
-- app-50
-- app-51
-- app-52
-- app-53
-- app-54
-- app-55
-- app-56
-- app-57
-- app-58
-- app-59
-- app-60
-- app-61
-- app-62
-- app-63
-- app-64
-- app-65
+- name: app-01
+- name: app-02
+- name: app-03
+- name: app-04
+- name: app-05
+- name: app-06
+- name: app-07
+- name: app-08
+- name: app-09
+- name: app-10
+- name: app-11
+- name: app-12
+- name: app-13
+- name: app-14
+- name: app-15
+- name: app-16
+- name: app-17
+- name: app-18
+- name: app-19
+- name: app-20
+- name: app-21
+- name: app-22
+- name: app-23
+- name: app-24
+- name: app-25
+- name: app-26
+- name: app-27
+- name: app-28
+- name: app-29
+- name: app-30
+- name: app-31
+- name: app-32
+- name: app-33
+- name: app-34
+- name: app-35
+- name: app-36
+- name: app-37
+- name: app-38
+- name: app-39
+- name: app-40
+- name: app-41
+- name: app-42
+- name: app-43
+- name: app-44
+- name: app-45
+- name: app-46
+- name: app-47
+- name: app-48
+- name: app-49
+- name: app-50
+- name: app-51
+- name: app-52
+- name: app-53
+- name: app-54
+- name: app-55
+- name: app-56
+- name: app-57
+- name: app-58
+- name: app-59
+- name: app-60
+- name: app-61
+- name: app-62
+- name: app-63
+- name: app-64
+- name: app-65
