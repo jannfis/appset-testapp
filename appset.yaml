@@ -11,13 +11,17 @@ spec:
       - git:
           repoURL: https://github.com/jannfis/appset-testapp
           revision: HEAD
-          files:
-          - path: appset/apps.yaml
-      - list:
-          elementsYaml: "{{ .apps | toJson }}"
+          directories:
+          - path: appset/*
+      - clusters:
+          selector:
+            matchExpressions:
+              - key: "argocd-agent.argoproj-labs.io/agent-name"
+                operator: Exists
+
   template:
     metadata:
-      name: '{{.name}}'
+      name: "{{.path.basename}}"
     spec:
       project: "default"
       source:
@@ -25,8 +29,8 @@ spec:
         targetRevision: HEAD
         path: app
       destination:
-        name: agent-managed
-        namespace: test-{{.name}}
+        name: "{{.path.basename}}"
+        namespace: "test-{{.path.basename}}"
       syncPolicy:
         automated:
           enabled: true
