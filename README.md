@@ -76,7 +76,17 @@ The Policy is created by the GitOpsCluster controller after Step 4. This script 
 bash acmhub/06-rbac-policy-patch.sh
 ```
 
-### Step 7: Verify agents are connected
+### Step 7: Patch the Policy with controller tuning
+
+Add `ARGOCD_K8S_CLIENT_QPS` and `ARGOCD_K8S_CLIENT_BURST` env vars to the managed cluster ArgoCD application controller for higher API throughput:
+
+```bash
+kubectl get policy scale-test-gitops-argocd-policy -n openshift-gitops -o json | \
+  jq '.spec["policy-templates"][0].objectDefinition.spec["object-templates"][0].objectDefinition.spec.controller = {"env": [{"name": "ARGOCD_K8S_CLIENT_QPS", "value": "150"}, {"name": "ARGOCD_K8S_CLIENT_BURST", "value": "300"}]}' | \
+  kubectl apply -f -
+```
+
+### Step 8: Verify agents are connected
 
 On a fresh setup, this can take 5-10 minutes while the GitOps Addon installs the OpenShift GitOps Operator on each managed cluster, deploys ArgoCD in agent mode, and connects agents to the hub principal.
 
