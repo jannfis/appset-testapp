@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: test-appset
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - matrix:
+      generators:
+      - git:
+          repoURL: https://github.com/jannfis/appset-testapp
+          revision: HEAD
+          directories:
+          - path: appset/*
+      - clusters:
+          selector:
+            matchExpressions:
+              - key: "argocd-agent.argoproj-labs.io/agent-name"
+                operator: Exists
+
+  template:
+    metadata:
+      name: "{{.name}}-{{.path.basename}}"
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/jannfis/appset-testapp
+        targetRevision: HEAD
+        path: app
+      destination:
+        name: "{{.name}}"
+        namespace: "test-{{.path.basename}}"
+      syncPolicy:
+        automated:
+          enabled: true
+        syncOptions:
+        - CreateNamespace=true

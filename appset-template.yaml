@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: test-appset-APPSET_NUM
+  namespace: openshift-gitops
+spec:
+  generators:
+    - clusterDecisionResource:
+        configMapRef: acm-placement
+        labelSelector:
+          matchLabels:
+            cluster.open-cluster-management.io/placement: scale-test-appset-placement
+  template:
+    metadata:
+      name: "{{name}}-test-appset-APPSET_NUM"
+    spec:
+      project: "default"
+      source:
+        repoURL: https://github.com/jannfis/appset-testapp
+        targetRevision: HEAD
+        path: app
+      destination:
+        name: "{{name}}"
+        namespace: "test-appset-APPSET_NUM"
+      syncPolicy:
+        automated:
+          enabled: true
+        syncOptions:
+          - CreateNamespace=true
