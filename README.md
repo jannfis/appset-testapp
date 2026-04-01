@@ -76,17 +76,7 @@ The Policy is created by the GitOpsCluster controller after Step 4. This script 
 bash acmhub/06-rbac-policy-patch.sh
 ```
 
-### Step 7: Patch the Policy with controller tuning
-
-Add `ARGOCD_K8S_CLIENT_QPS` and `ARGOCD_K8S_CLIENT_BURST` env vars to the managed cluster ArgoCD application controller for higher API throughput:
-
-```bash
-kubectl get policy scale-test-gitops-argocd-policy -n openshift-gitops -o json | \
-  jq '.spec["policy-templates"][0].objectDefinition.spec["object-templates"][0].objectDefinition.spec.controller = {"env": [{"name": "ARGOCD_K8S_CLIENT_QPS", "value": "150"}, {"name": "ARGOCD_K8S_CLIENT_BURST", "value": "300"}]}' | \
-  kubectl apply -f -
-```
-
-### Step 8: Verify agents are connected
+### Step 7: Verify agents are connected
 
 On a fresh setup, this can take 5-10 minutes while the GitOps Addon installs the OpenShift GitOps Operator on each managed cluster, deploys ArgoCD in agent mode, and connects agents to the hub principal.
 
@@ -100,6 +90,16 @@ Wait until the phase is `successful`, then verify the AppSet Placement has clust
 kubectl get placementdecision -n openshift-gitops \
   -l cluster.open-cluster-management.io/placement=scale-test-appset-placement \
   -o jsonpath='{range .items[*].status.decisions[*]}{.clusterName}{"\n"}{end}'
+```
+
+### Step 8: Patch the Policy with controller tuning (optional)
+
+After agents are connected and stable, add `ARGOCD_K8S_CLIENT_QPS` and `ARGOCD_K8S_CLIENT_BURST` env vars to the managed cluster ArgoCD application controller for higher API throughput:
+
+```bash
+kubectl get policy scale-test-gitops-argocd-policy -n openshift-gitops -o json | \
+  jq '.spec["policy-templates"][0].objectDefinition.spec["object-templates"][0].objectDefinition.spec.controller = {"env": [{"name": "ARGOCD_K8S_CLIENT_QPS", "value": "150"}, {"name": "ARGOCD_K8S_CLIENT_BURST", "value": "300"}]}' | \
+  kubectl apply -f -
 ```
 
 ## Verify with 1 Cluster
@@ -122,10 +122,10 @@ Verify the Application was generated:
 kubectl get applications.argoproj.io -n openshift-gitops
 ```
 
-Wait for the Application to sync:
+Wait for the Application to sync (can take 2-5 minutes on a fresh setup):
 
 ```bash
-kubectl get applications.argoproj.io -n openshift-gitops -o wide
+watch kubectl get applications.argoproj.io -n openshift-gitops -o wide
 ```
 
 On the managed cluster, verify the ConfigMaps were deployed:
@@ -147,6 +147,8 @@ kubectl get applications.argoproj.io -n openshift-gitops
 ```
 
 ## Run
+
+`<max_clusters>` controls how many managed clusters to target. The script patches the AppSet Placement's `numberOfClusters` field to this value, then creates 65 ApplicationSets. Each AppSet deploys 1 Application per targeted cluster, so the total number of Applications is `65 × <max_clusters>`.
 
 ```bash
 export KUBECONFIG=/tmp/hub
